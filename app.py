@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify,send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, make_response, abort
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from flask_cors import CORS , cross_origin
+from flask_cors import CORS, cross_origin
 from flask_bcrypt import Bcrypt  # Add this for password hashing
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity  # Add for JWT authentication
 from datetime import datetime
@@ -13,8 +13,6 @@ CORS(app)
 MONGO_URI = "mongodb+srv://ChaitanyaLenka:chaitu123@cluster0.rzfiw.mongodb.net/"  # Replace with your MongoDB URI if different
 client = MongoClient(MONGO_URI)
 db = client['food_delivery']  # Replace 'food_delivery' with your database name
-
-
 
 bcrypt = Bcrypt(app)
 app.config["JWT_SECRET_KEY"] = "supersecretkey"  # Change this to a more secure key
@@ -30,7 +28,7 @@ def signup():
     data = request.json
     username = data.get("username")
     email = data.get("email")
-    mobile= data.get("mobile")
+    mobile = data.get("mobile")
     password = data.get("password")
 
     # Check if the user already exists
@@ -45,7 +43,7 @@ def signup():
     user_id = db.users.insert_one({
         "username": username,
         "email": email,
-        "mobile":mobile,
+        "mobile": mobile,
         "password": hashed_password
     }).inserted_id
 
@@ -73,8 +71,6 @@ def login():
 
     return jsonify({"access_token": access_token, "user_id": user_id}), 200
 
-
-
 @app.route('/users/<user_id>', methods=['GET'])
 @cross_origin()
 @jwt_required()
@@ -90,7 +86,13 @@ def get_user(user_id):
 @app.route('/images/<filename>')
 @cross_origin()
 def serve_image(filename):
-    return send_from_directory(IMAGE_FOLDER, filename)
+    file_path = os.path.join(IMAGE_FOLDER, filename)
+    if os.path.exists(file_path):
+        response = make_response(send_from_directory(IMAGE_FOLDER, filename))
+        response.headers['X-Content-Type-Options'] = 'nosniff'  # Prevent MIME sniffing
+        return response
+    else:
+        return abort(404)  # If image not found, return 404 error
 
 @app.route('/restaurants', methods=['GET'])
 @cross_origin()
@@ -109,7 +111,6 @@ def get_restaurants():
         restaurant_list.append(restaurant)
 
     return jsonify(restaurant_list), 200
-
 
 @app.route('/restaurant/<restaurant_id>', methods=['GET'])
 @cross_origin()
@@ -152,7 +153,6 @@ def get_restaurant_by_id(restaurant_id):
     except Exception as e:
         return jsonify({"message": str(e)}), 500
 
-
 # Orders Collection
 @app.route('/orders', methods=['POST'])
 @cross_origin()
@@ -176,7 +176,6 @@ def place_order():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-
 @app.route('/orders/user/<user_id>', methods=['GET'])
 @cross_origin()
 @jwt_required()
@@ -196,7 +195,6 @@ def get_user_orders(user_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-
 # Delivery Agents Collection
 @app.route('/agents', methods=['POST'])
 @cross_origin()
@@ -214,13 +212,10 @@ def get_agent(agent_id):
     agent['_id'] = str(agent['_id'])
     return jsonify(agent)
 
-
-
 @app.route('/')
 @cross_origin()
 def serve():
     return send_from_directory(app.static_folder, 'index.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
