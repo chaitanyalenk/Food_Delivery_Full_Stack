@@ -130,7 +130,7 @@ navigate('/checkout', { state: { cart, total: calculateTotal() } }); // Passing 
   }}
 >
   <img 
-    src={`https://fooddeliveryapp-38or.onrender.com${restaurant.image_url}`} 
+    src={`https://fooddeliveryapp-38or.onrender.com/${restaurant.image_url}`} 
     alt={restaurant.restaurant_name} 
     style={{
       width: '70%', 

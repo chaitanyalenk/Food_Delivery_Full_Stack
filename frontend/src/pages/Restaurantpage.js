@@ -83,7 +83,7 @@ function RestaurantPage() {
               onMouseOut={e => e.currentTarget.style = cardStyle} // Removing hover effect
             >
               <img
-                src={`https://fooddeliveryapp-38or.onrender.com${restaurant.image_url}`}
+                src={`https://fooddeliveryapp-38or.onrender.com/${restaurant.image_url}`}
                 alt={restaurant.restaurant_name}
                 className="card-img-top"
                 style={cardImgStyle}

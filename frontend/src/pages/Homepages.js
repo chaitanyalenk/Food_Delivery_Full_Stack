@@ -114,7 +114,7 @@ function HomePage() {
                 onMouseOut={(e) => (e.currentTarget.style = cardStyle)}
               >
                 <img
-                  src={`https://fooddeliveryapp-38or.onrender.com${restaurant.image_url}`}
+                  src={`https://fooddeliveryapp-38or.onrender.com/${restaurant.image_url}`}
                   alt={restaurant.restaurant_name}
                   style={cardImgStyle}
 
@@ -175,7 +175,7 @@ function HomePage() {
                 onMouseOut={(e) => (e.currentTarget.style = cardStyle)}
               >
                 <img
-                  src={`https://fooddeliveryapp-38or.onrender.com${restaurant.image_url}`}
+                  src={`https://fooddeliveryapp-38or.onrender.com/${restaurant.image_url}`}
                   alt={restaurant.restaurant_name}
                   style={cardImgStyle}
                   onError={(e) => { e.target.src = '/default_image.jpg'; }}
