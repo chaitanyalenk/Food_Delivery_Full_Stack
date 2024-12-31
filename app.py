@@ -107,7 +107,7 @@ def get_restaurants():
         restaurant['_id'] = str(restaurant['_id'])  # Convert ObjectId to string for JSON serialization
         # Build restaurant image URL
         image_filename = f"restaurant_{restaurant['restaurant_name'].replace(' ', '_')}.jpg"
-        restaurant['image_url'] = f"/{IMAGE_FOLDER}/{image_filename}"
+        restaurant['image_url'] = f"/{image_filename}"
         restaurant_list.append(restaurant)
 
     return jsonify(restaurant_list), 200
@@ -128,13 +128,12 @@ def get_restaurant_by_id(restaurant_id):
 
         # Generate the restaurant image path
         image_filename = f"restaurant_{restaurant['restaurant_name'].replace(' ', '_')}.jpg"
-        restaurant_image_path = os.path.join(IMAGE_FOLDER, image_filename)
-
+        
         # Check if the image exists
-        if os.path.exists(restaurant_image_path):
-            image_url = f"/{restaurant_image_path}"
+        if os.path.exists(image_filename):
+            image_url = f"/{image_filename}"
         else:
-            image_url = f"/{IMAGE_FOLDER}/default_restaurant.jpg"  # Fallback to default image
+            image_url = f"/default_restaurant.jpg"  # Fallback to default image
 
         # Build the restaurant response
         restaurant_details = {
