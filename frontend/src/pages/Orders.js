@@ -13,7 +13,7 @@ function Orders() {
 
     // Fetch user orders from the API
     axios
-      .get(`http://localhost:5000/orders/user/${userId}`, { // Replace USER_ID with actual user ID
+      .get(`https://fooddeliveryapp-38or.onrender.com/orders/user/${userId}`, { // Replace USER_ID with actual user ID
         headers: {
           Authorization: `Bearer ${token}`, // Include token in headers
         },

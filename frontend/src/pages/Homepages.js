@@ -15,7 +15,7 @@ function HomePage() {
     const token = localStorage.getItem('token');
 
     axios
-      .get('http://localhost:5000/restaurants', {
+      .get('https://fooddeliveryapp-38or.onrender.com/restaurants', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -114,7 +114,7 @@ function HomePage() {
                 onMouseOut={(e) => (e.currentTarget.style = cardStyle)}
               >
                 <img
-                  src={`http://localhost:5000${restaurant.image_url}`}
+                  src={`https://fooddeliveryapp-38or.onrender.com${restaurant.image_url}`}
                   alt={restaurant.restaurant_name}
                   style={cardImgStyle}
 
@@ -147,7 +147,7 @@ function HomePage() {
                 onMouseOut={(e) => (e.currentTarget.style = cardStyle)}
               >
                 <img
-                  src={`http://localhost:5000/images/${category}.jpg`}
+                  src={`https://fooddeliveryapp-38or.onrender.com/images/${category}.jpg`}
                   alt={category}
                   style={cardImgStyle}
                   onError={(e) => { e.target.src = '/default_category.jpg'; }}
@@ -175,7 +175,7 @@ function HomePage() {
                 onMouseOut={(e) => (e.currentTarget.style = cardStyle)}
               >
                 <img
-                  src={`http://localhost:5000${restaurant.image_url}`}
+                  src={`https://fooddeliveryapp-38or.onrender.com${restaurant.image_url}`}
                   alt={restaurant.restaurant_name}
                   style={cardImgStyle}
                   onError={(e) => { e.target.src = '/default_image.jpg'; }}

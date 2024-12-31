@@ -16,7 +16,7 @@ function RestaurantDetailsPage() {
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/restaurant/${id}`, {
+        const response = await axios.get(`https://fooddeliveryapp-38or.onrender.com/restaurant/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           }
@@ -130,7 +130,7 @@ navigate('/checkout', { state: { cart, total: calculateTotal() } }); // Passing 
   }}
 >
   <img 
-    src={`http://localhost:5000${restaurant.image_url}`} 
+    src={`https://fooddeliveryapp-38or.onrender.com${restaurant.image_url}`} 
     alt={restaurant.restaurant_name} 
     style={{
       width: '70%', 

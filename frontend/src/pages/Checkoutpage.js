@@ -51,7 +51,7 @@ function CheckoutPage() {
 
     try {
       // Send POST request to store order details in the database
-      await axios.post('http://localhost:5000/orders', order, {
+      await axios.post('https://fooddeliveryapp-38or.onrender.com/orders', order, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming token is stored in localStorage

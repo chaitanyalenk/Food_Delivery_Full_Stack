@@ -13,7 +13,7 @@ function RestaurantPage() {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/restaurants', {
+        const response = await axios.get('https://fooddeliveryapp-38or.onrender.com/restaurants', {
           headers: {
             Authorization: `Bearer ${token}`,  // Adding the JWT token to the request header
           }
@@ -83,7 +83,7 @@ function RestaurantPage() {
               onMouseOut={e => e.currentTarget.style = cardStyle} // Removing hover effect
             >
               <img
-                src={`http://localhost:5000${restaurant.image_url}`}
+                src={`https://fooddeliveryapp-38or.onrender.com${restaurant.image_url}`}
                 alt={restaurant.restaurant_name}
                 className="card-img-top"
                 style={cardImgStyle}
