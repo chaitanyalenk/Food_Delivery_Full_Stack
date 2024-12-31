@@ -1,16 +1,16 @@
 from flask import Flask, request, jsonify,send_from_directory
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from flask_cors import CORS
+from flask_cors import CORS , cross_origin
 from flask_bcrypt import Bcrypt  # Add this for password hashing
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity  # Add for JWT authentication
 from datetime import datetime
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='frontend/build')
 CORS(app)
 # MongoDB Configuration (adjust the URI to match your MongoDB setup)
-MONGO_URI = "mongodb://localhost:27017/food_delivery"  # Replace with your MongoDB URI if different
+MONGO_URI = "mongodb+srv://ChaitanyaLenka:chaitu123@cluster0.rzfiw.mongodb.net/"  # Replace with your MongoDB URI if different
 client = MongoClient(MONGO_URI)
 db = client['food_delivery']  # Replace 'food_delivery' with your database name
 
@@ -25,6 +25,7 @@ IMAGE_FOLDER = 'static/images'
 
 # User Signup
 @app.route('/signup', methods=['POST'])
+@cross_origin()
 def signup():
     data = request.json
     username = data.get("username")
@@ -52,6 +53,7 @@ def signup():
 
 # User Login
 @app.route('/login', methods=['POST'])
+@cross_origin()
 def login():
     data = request.json
     email = data.get("email")
@@ -74,6 +76,7 @@ def login():
 
 
 @app.route('/users/<user_id>', methods=['GET'])
+@cross_origin()
 @jwt_required()
 def get_user(user_id):
     user = db.users.find_one({"_id": ObjectId(user_id)})
@@ -85,10 +88,12 @@ def get_user(user_id):
 # Restaurants Collection
 # Serve static files for images
 @app.route('/images/<filename>')
+@cross_origin()
 def serve_image(filename):
     return send_from_directory(IMAGE_FOLDER, filename)
 
 @app.route('/restaurants', methods=['GET'])
+@cross_origin()
 @jwt_required()
 def get_restaurants():
     # Fetching all restaurants from the database
@@ -107,6 +112,7 @@ def get_restaurants():
 
 
 @app.route('/restaurant/<restaurant_id>', methods=['GET'])
+@cross_origin()
 @jwt_required()
 def get_restaurant_by_id(restaurant_id):
     try:
@@ -149,6 +155,7 @@ def get_restaurant_by_id(restaurant_id):
 
 # Orders Collection
 @app.route('/orders', methods=['POST'])
+@cross_origin()
 def place_order():
     order_data = request.json
     order = {
@@ -171,6 +178,7 @@ def place_order():
 
 
 @app.route('/orders/user/<user_id>', methods=['GET'])
+@cross_origin()
 @jwt_required()
 def get_user_orders(user_id):
     try:
@@ -191,18 +199,28 @@ def get_user_orders(user_id):
 
 # Delivery Agents Collection
 @app.route('/agents', methods=['POST'])
+@cross_origin()
 def add_agent():
     data = request.json
     agent_id = db.agents.insert_one(data).inserted_id
     return jsonify({"message": "Agent added", "agent_id": str(agent_id)}), 201
 
 @app.route('/agents/<agent_id>', methods=['GET'])
+@cross_origin()
 def get_agent(agent_id):
     agent = db.agents.find_one({"_id": ObjectId(agent_id)})
     if not agent:
         return jsonify({"error": "Agent not found"}), 404
     agent['_id'] = str(agent['_id'])
     return jsonify(agent)
+
+
+
+@app.route('/')
+@cross_origin()
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
